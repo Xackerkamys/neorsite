@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Нейросети</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+section {
+    padding: 20px;
+    margin: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background: #333;
+    color: #fff;
+}
+
+.slider {
+    position: relative;
+    max-width: 600px; /* Максимальная ширина слайдера */
+    margin: 20px auto; /* Центрирование слайдера */
+    overflow: hidden; /* Скрытие частей изображений за пределами слайдера */
+    border-radius: 15px; /* Закругление углов */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Тень для слайдера */
+}
+
+.slides {
+    display: flex; /* Использование flexbox для размещения изображений в ряд */
+    transition: transform 0.5s ease; /* Плавный переход при смене слайдов */
+}
+
+.slides img {
+    width: 100%; /* Ширина изображения 100% от контейнера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+    object-fit: cover; /* Обеспечение заполнения контейнера без искажений */
+    border-radius: 15px; /* Закругление углов изображений */
+}
+
+button {
+    background-color: #4CAF50; /* Зеленый фон */
+    color: white; /* Белый текст */
+    border: none; /* Без рамки */
+    padding: 15px 32px; /* Отступы */
+    text-align: center; /* Центрирование текста */
+    text-decoration: none; /* Без подчеркивания */
+    display: inline-block; /* Отображение как блочный элемент */
+    font-size: 16px; /* Размер шрифта */
+    margin: 4px 2px; /* Отступы */
+    cursor: pointer; /* Указатель при наведении */
+    border-radius: 12px; /* Скругленные углы */
+    transition: background-color 0.3s, transform 0.2s; /* Плавный переход */
+}
+
+button:hover {
+    background-color: #45a049; /* Более темный зеленый при наведении */
+    transform: scale(1.05); /* Увеличение при наведении */
+}
+
+button:active {
+    transform: scale(0.95); /* Уменьшение при нажатии */
+}
+#userInput {
+            width: 100%; /* Задает ширину textarea на 100% */
+            box-sizing: border-box; /* Учитывает padding и border в ширине */
+            padding: 10px; /* Отступы внутри textarea */
+            resize: none; /* Отключает возможность изменения размера */
+        }
+
+        #submit {
+            margin-top: 10px; /* Отступ сверху для кнопки */
+            padding: 10px 15px; /* Отступы внутри кнопки */
+            cursor: pointer; /* Указывает, что кнопка кликабельна */
+        }
+#submitYandex {
+            margin-top: 10px; /* Отступ сверху для кнопки */
+            padding: 10px 15px; /* Отступы внутри кнопки */
+            cursor: pointer; /* Указывает, что кнопка кликабельна */
+        }
+
+        #generatedText {
+            margin-top: 20px; /* Отступ сверху для текста */
+        }
+
+.gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gallery-item {
+            width: 200px; /* Ширина изображений */
+            margin: 10px;
+            cursor: pointer; /* Указатель при наведении */
+            transition: transform 0.2s; /* Эффект при наведении */
+        }
+        .gallery-item:hover {
+            transform: scale(1.05); /* Увеличение при наведении */
+        }
+        .modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Окно фиксировано */
+    z-index: 1; /* На переднем плане */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Прокрутка, если нужно */
+    background-color: rgba(0, 0, 0, 0.9); /* Полупрозрачный черный фон */
+}
+
+.modal-content {
+    position: absolute; /* Позиционирование относительно родителя */
+    top: 50%; /* Сдвиг вниз на 50% от верхней части */
+    left: 50%; /* Сдвиг вправо на 50% от левой части */
+    transform: translate(-50%, -50%); /* Центрируем изображение */
+    display: block;
+    width: 100%; /* Полная ширина */
+    max-width: 1000px; /* Максимальная ширина */
+}
+
+        #caption {
+            margin: 10px;
+            color: #ccc;
+            text-align: center;
+        }
+        .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+    <header>
+        <h1>Нейросети: Введение и Применения</h1>
+        <nav aria-label="Основное меню">
+            <ul>
+                <li><a href="#introduction">Введение</a></li>
+                <li><a href="#applications">Применения</a></li>
+                <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#interactive">Интерактив</a></li>
+                <li><a href="#conclusion">Заключение</a></li>
+            </ul>
+        </nav>
+        <button id="toggleContrast" aria-label="Переключить контрастность">Переключить контрастность</button>
+        <button id="readText" aria-label="Прочитать текст">Прочитать текст</button>
+        <button onclick="changeFontSize(1)" aria-label="Увеличить шрифт">A+</button>
+        <button onclick="changeFontSize(-1)" aria-label="Уменьшить шрифт">A-</button>
+    </header>
+    <section id="introduction">
+        <h2>Что такое нейросети?</h2>
+        <p>Нейросети — это вычислительные модели, вдохновленные работой человеческого мозга. Они способны обучаться на данных, распознавать паттерны и делать прогнозы.</p>
+    </section>
+    <section id="applications">
+        <h2>Применения нейросетей</h2>
+        <ul>
+            <li>Медицина</li>
+            <li>Искусство</li>
+            <li>Финансы</li>
+            <li>Автономные транспортные средства</li>
+            <li>Обработка естественного языка</li>
+        </ul>
+    </section>
+    <section id="gallery">
+        <h2>Галерея изображений</h2>
+
+<div class="gallery">
+    <img src="https://cdn-st2.rtr-vesti.ru/vh/pictures/hd/317/712/1.jpg" class="gallery-item">
+    <img src="https://www.align.com/hs-fs/hubfs/_Blog%20and%20Featured%20Images/FY22/AdobeStock_162765779.jpg?"  class="gallery-item">
+    <img src="https://demens.nu/wp-content/uploads/2019/05/Robots_humanisme_web.jpg" class="gallery-item">
+    <img src="https://i.artfile.me/wallpaper/09-04-2024/1920x1080/3d-grafika-uzhas--horror-nejroseti-grafi-1690374.jpg"  class="gallery-item">
+    <img src="https://avatars.mds.yandex.net/i?id=5b651b6789e12a993c314f1a24ee8f2c_l-8312047-images-thumbs&n=13"  class="gallery-item">
+    <img src="https://i.artfile.me/wallpaper/23-06-2023/1920x1280/3d-grafika-lyudi--people-nejroseti-grafi-1654374.jpg" class="gallery-item">
+</div>
+
+<div id="modal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+    </section>
+    <section id="interactive">
+        <h2>Поиск в Google или Яндексе</h2>
+        <input type="text" id="userInput" placeholder="Введите ваш запрос" aria-label="Введите ваш запрос">
+        <button id="submit" aria-label="Поиск в Google">Поиск в Google</button>
+        <button id="submitYandex" aria-label="Поиск в Яндексе">Поиск в Яндексе</button>
+    </section>
+    <div class="slider">
+        <div class="slides">
+            <img src="https://substackcdn.com/image/fetch/f_auto,q_auto:best,fl_progressive:steep/https%3A%2F%2Fdarkfutura.substack.com%2Fapi%2Fv1%2Fpost_preview%2F111675532%2Ftwitter.jpg%3Fversion%3D4" alt="Нейросеть 1">
+            <img src="https://www.benesserefisicomentale.it/wp-content/uploads/2017/06/IMMAGINE-III-ARTICOLO-LIMPORTANZA-DI-ALLENARE-LA-PROPRIA-MENTE-.jpeg" class="slide" alt="Нейросеть 2">
+            <img src="https://cdnb.artstation.com/p/assets/images/images/036/101/929/4k/meats-meier-fiberopticman-2021-1.jpg?1616716136" class="slide" alt="Нейросеть 3">
+        </div>
+        <center>
+            <button class="prev" onclick="changeSlide(-1)" aria-label="Предыдущее изображение">&#10094;</button>
+            <button class="next" onclick="changeSlide(1)" aria-label="Следующее изображение">&#10095;</button>
+        </center>
+    </div>
+<section id="conclusion">
+        <h2>Заключение о Нейросетях</h2>
+        <p>Нейросети представляют собой мощный инструмент, который может значительно улучшить различные процессы и услуги. Вот некоторые из их плюсов и минусов:</p>
+        <h3>Плюсы:</h3>
+        <ul>
+            <li>Способность обрабатывать большие объемы данных.</li>
+            <li>Автоматизация рутинных задач.</li>
+            <li>Улучшение точности прогнозов и распознавания паттернов.</li>
+            <li>Применение в различных областях, от медицины до искусства.</li>
+        </ul>
+        <h3>Минусы:</h3>
+        <ul>
+            <li>Необходимость в большом объеме обучающих данных.</li>
+            <li>Сложность в интерпретации результатов.</li>
+            <li>Этические и правовые вопросы, связанные с использованием ИИ.</li>
+            <li>Риск замещения рабочих мест.</li>
+        </ul>
+        <p>Будущее нейросетей обещает быть захватывающим! 😊</p>
+    </section>
+    <footer id="conclusion">
+        <p>Будущее нейросетей обещает быть захватывающим! © 2025 Нейросети</p>
+    </footer>
+<script>
+let currentFontSize = 16; // Начальный размер шрифта
+    let currentSlide = 0; // Индекс текущего слайда
+    const slides = document.querySelector('.slides'); // Получаем контейнер слайдов
+    const slideImages = document.querySelectorAll('.slides img'); // Получаем все изображения слайдов
+    const totalSlides = slideImages.length; // Общее количество слайдов
+
+    function changeFontSize(delta) {
+        currentFontSize += delta;
+        document.body.style.fontSize = currentFontSize + 'px';
+    }
+
+    function showSlide(index) {
+        // Изменяем transform для переключения слайдов
+        const offset = -index * 100; // Вычисляем смещение
+        slides.style.transform = `translateX(${offset}%)`; // Применяем смещение
+    }
+
+    function changeSlide(direction) {
+        currentSlide += direction; // Изменение индекса слайда
+        
+        // Проверка границ
+        if (currentSlide < 0) {
+            currentSlide = totalSlides - 1; // Если меньше 0, переход к последнему слайду
+        } else if (currentSlide >= totalSlides) {
+            currentSlide = 0; // Если больше или равно количеству слайдов, переход к первому
+        }
+        
+        showSlide(currentSlide); // Обновляем отображаемый слайд
+    }
+
+    // Инициализация: показываем первый слайд
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(currentSlide); // Показать первый слайд при загрузке страницы
+    });
+
+    // Обработчики событий для галереи изображений
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById("img01");
+    const captionText = document.getElementById("caption");
+
+    galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            modal.style.display = "block";
+            modalImg.src = item.src;
+            captionText.innerHTML = item.alt;
+        });
+    });
+
+    const closeModal = document.getElementsByClassName("close")[0];
+    closeModal.onclick = () => {
+        modal.style.display = "none";
+    };
+
+    // Обработчики событий для кнопок поиска
+    document.getElementById('submit').addEventListener('click', function() {
+        const query = document.getElementById('userInput').value;
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    });
+
+    document.getElementById('submitYandex').addEventListener('click', function() {
+        const query = document.getElementById('userInput').value;
+        window.open(`https://yandex.ru/search/?text=${encodeURIComponent(query)}`, '_blank');
+    });
+
+    // Обработчик для переключения контрастности
+    let highContrast = false;
+document.getElementById('toggleContrast').addEventListener('click', function() {
+    highContrast = !highContrast;
+    
+    if (highContrast) {
+        // Устанавливаем светло-серый фон и темно-серый текст
+        document.body.style.backgroundColor = '#e0e0e0'; // Светло-серый фон
+        document.body.style.color = '#333'; // Темно-серый текст
+
+        // Изменяем стили для других элементов
+        document.querySelector('header').style.background = '#444'; // Темно-серый фон для заголовка
+        document.querySelector('header').style.color = '#fff'; // Белый текст для заголовка
+        
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.style.color = '#fff'; // Белый цвет для ссылок в навигации
+        });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.background = '#f0f0f0'; // Светло-серый фон для секций
+            section.style.color = '#333'; // Темно-серый текст для секций
+        });
+
+        document.querySelector('footer').style.background = '#444'; // Темно-серый фон для подвала
+        document.querySelector('footer').style.color = '#fff'; // Белый текст для подвала
+
+        // Изменяем цвет кнопок
+        document.querySelectorAll('button').forEach(button => {
+            button.style.backgroundColor = '#555'; // Темно-серый фон для кнопок
+            button.style.color = '#fff'; // Белый текст для кнопок
+        });
+    } else {
+        // Возвращаем к исходным цветам
+        document.body.style.backgroundColor = '#f4f4f4'; // Белый фон
+        document.body.style.color = '#333'; // Черный текст
+
+        document.querySelector('header').style.background = '#333'; // Исходный фон для заголовка
+        document.querySelector('header').style.color = '#fff'; // Исходный текст для заголовка
+        
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.style.color = '#fff'; // Исходный цвет для ссылок в навигации
+        });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.background = '#fff'; // Исходный фон для секций
+            section.style.color = '#333'; // Исходный текст для секций
+        });
+
+        document.querySelector('footer').style.background = '#333'; // Исходный фон для подвала
+        document.querySelector('footer').style.color = '#fff'; // Исходный текст для подвала
+
+        // Возвращаем исходный цвет кнопок
+        document.querySelectorAll('button').forEach(button => {
+            button.style.backgroundColor = '#4CAF50'; // Исходный фон для кнопок
+            button.style.color = '#fff'; // Исходный текст для кнопок
+        });
+    }
+});
+
+
+    // Обработчики событий для кнопок переключения слайдов
+    document.getElementById('readText').addEventListener('click', function() {
+    const text = document.body.innerText;
+    const speech = new SpeechSynthesisUtterance(text);
+    
+    speech.lang = 'ru-RU';
+    speech.rate = 1;
+    speech.pitch = 1;
+
+    // Остановить текущее воспроизведение перед началом нового
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+});
+</script>
+</body>
+</html>
+
