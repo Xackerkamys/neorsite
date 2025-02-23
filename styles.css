@@ -54,3 +54,26 @@ footer {
     background: #333;
     color: #fff;
 }
+button {
+    background-color: #4CAF50; /* Зеленый фон */
+    color: white; /* Белый текст */
+    border: none; /* Без рамки */
+    padding: 15px 32px; /* Отступы */
+    text-align: center; /* Центрирование текста */
+    text-decoration: none; /* Без подчеркивания */
+    display: inline-block; /* Отображение как блочный элемент */
+    font-size: 16px; /* Размер шрифта */
+    margin: 4px 2px; /* Отступы */
+    cursor: pointer; /* Указатель при наведении */
+    border-radius: 12px; /* Скругленные углы */
+    transition: background-color 0.3s, transform 0.2s; /* Плавный переход */
+}
+
+button:hover {
+    background-color: #45a049; /* Более темный зеленый при наведении */
+    transform: scale(1.05); /* Увеличение при наведении */
+}
+
+button:active {
+    transform: scale(0.95); /* Уменьшение при нажатии */
+}
